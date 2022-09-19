@@ -45,13 +45,17 @@ public class CategoryController {
 	
 	@PutMapping("/update/{id}")
 	public Category updateCategory(@PathVariable("id") String categoryId, @RequestBody Category category) {
-		Category updatedCategory = new Category();
 		Category dbCategory = categoryRepo.findById(Long.parseLong(categoryId)).get();
 		
-		updatedCategory.setName(dbCategory.getName());
-		updatedCategory.setDescription(dbCategory.getDescription());
-		updatedCategory.setUpdatedDatetime(LocalDateTime.now());
-		return updatedCategory;
+		if(category.getName()!= null) {
+			dbCategory.setName(category.getName());
+		}
+		if(category.getDescription() != null) {
+			dbCategory.setDescription(category.getDescription());
+		}
+		dbCategory.setUpdatedDatetime(LocalDateTime.now());
+		categoryRepo.save(dbCategory);
+		return dbCategory;
 	}
 	
 	@DeleteMapping("/delete/{id}")
